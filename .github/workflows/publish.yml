@@ -1,0 +1,65 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events for main
+  push:
+    branches: [ main ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+
+      - name: Using en as default
+        run: cp -a ./en/. ./
+
+      - name: Publish to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+
+  htmlChecks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+          submodules: true
+
+      - name: Using en as default
+        run: cp -a ./en/. ./
+
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.7
+
+      - name: Install html-proofer
+        run: |
+          gem install html-proofer
+
+      - name: Cache HTMLProofer
+        id: cache-htmlproofer
+        uses: actions/cache@v2
+        with:
+          path: tmp/.htmlproofer
+          key: ${{ runner.os }}-htmlproofer
+
+      # options : https://github.com/gjtorikian/html-proofer#configuration
+      # https://github.com/gjtorikian/html-proofer/blob/main/bin/htmlproofer
+      - name: Executing html-proofer
+        run: |
+          htmlproofer ./ --http-status-ignore 999 --url-ignore "/glennkerbiriou.yj.fr/"

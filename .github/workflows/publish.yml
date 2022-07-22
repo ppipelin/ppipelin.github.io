@@ -62,4 +62,4 @@ jobs:
       # https://github.com/gjtorikian/html-proofer/blob/main/bin/htmlproofer
       - name: Executing html-proofer
         run: |
-          htmlproofer ./ --http-status-ignore 999 --url-ignore "/glennkerbiriou.yj.fr/"
+          htmlproofer ./ --ignore-status-codes "999" --ignore-urls "/glennkerbiriou.yj.fr/"

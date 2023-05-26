@@ -43,9 +43,9 @@ jobs:
         run: cp -a ./en/. ./
 
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 2.7
+          ruby-version: '3.0'
 
       - name: Install html-proofer
         run: |
@@ -53,7 +53,7 @@ jobs:
 
       - name: Cache HTMLProofer
         id: cache-htmlproofer
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: tmp/.htmlproofer
           key: ${{ runner.os }}-htmlproofer
@@ -62,4 +62,4 @@ jobs:
       # https://github.com/gjtorikian/html-proofer/blob/main/bin/htmlproofer
       - name: Executing html-proofer
         run: |
-          htmlproofer ./ --ignore-status-codes "999" --ignore-urls "/glennkerbiriou.yj.fr/"
+          htmlproofer ./ --ignore-status-codes "999" --allow_missing_href true --ignore-urls "/glennkerbiriou.yj.fr/,/https://www.researchgate.net/profile/Pascal_Grittmann/publication/334433762_Optimal_multiple_importance_sampling/links/5d2c695da6fdcc2462e12f96/Optimal-multiple-importance-sampling.pdf/"

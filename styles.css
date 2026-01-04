@@ -222,6 +222,11 @@ a.relax{
 	transform: translateX(30px);
 }
 
+.book {
+	width: 80%;
+	min-width: 20rem;
+}
+
 /* Bae : https://github.com/s9a/bae */
 .bae-clean:not(.bae-unclean) { background:transparent; color:inherit }
 .bae-flat:not(.bae-unflat),

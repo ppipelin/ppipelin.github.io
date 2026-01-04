@@ -66,7 +66,8 @@
     <h1 class="forehead undertow charming hella ++++">
       The Ultimate Chess Programming Book
     </h1>
-    <h2 class="forehead undertow charming hella +++">
+    This book describes the elements that a chess engine can contain. Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a>.
+    <h2 class="forehead undertow charming hella">
       Introduction
     </h2>
     Chess is a turn-based board game where all information are known at all time. Position is symmetrical with white color starting. Each piece type moves a certain way.
@@ -76,7 +77,7 @@
     <br>
     Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
 
-    <h2 class="forehead undertow charming hella +++">
+    <h2 class="forehead undertow charming hella">
       Search and Evaluation
     </h2>
     A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
@@ -88,13 +89,13 @@
     <br>
     In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula $ leaves = branching\_factor^{depth} $. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
 
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Minimax
     </h3>
     During the game, every player is looking for the best possible leaf in the tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will try to maximize the final score and the other one will try to minimize it. It is possible to trace a path in the tree that satisfies both players to eventually arrive at a leaf and evaluate the position.
     <br>
     Since the game tree can be very long, most of the time a leaf will not be the final position of the game (win/draw/loss) but another, more advance state. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Alpha-Beta Pruning and Iterative Deepening
     </h3>
     Minimax requires all the leaves to be evaluated but their number grows exponentially with depth. There is a way to prune some branches without reduce faithfulness and this can be done with alpha-beta pruning.
@@ -103,38 +104,60 @@
     <br>
     A path that will give a score higher than beta would never arise because the losing player would prefer to take the path that obtain a score of beta. Conversely, current player can avoid getting a lower score than alpha by taking the path of alpha. All paths outside of the alpha-beta bounds will be avoided by each player.
     <br>
-    In chess, the likelihood of win is reversible, a the opponent of a player that has a 80% win has 20% chances of lose (or draw). Alpha and beta bounds can then be switched when changing to the other player point of view and the score can be negated. This is called newer version of minimax is called negamax.
+    In chess, the likelihood of win is reversible, a the opponent of a player that has a 80% win has 20% chances of lose (or draw). Alpha and beta bounds can then be switched when changing to the other player point of view and the score can be negated. This newer version of minimax is called negamax.
     <br>
     CODE
     <br>
-    The first evaluated paths give alpha-beta bounds, if the best path is selected first the narrower the bound will be and the closer it will be to the actual score of the position. With a smaller bound, most of the other paths will be pruned and very few evaluations will be necessary. With these characterics emerges <em>iterative deepening</em>.
+    The first evaluated paths give alpha-beta bounds, also called <em>windows</em>, if the best path is selected first, the narrower the window will be, and the closer it will be to the actual score of the position. With a smaller window, most of the remaining paths will be pruned and very few evaluations will be necessary. With these characterics emerges <em>iterative deepening</em>.
     <br>
     <br>
-    A depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and to avoid getting incomplete results.
+    A depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and avoid getting incomplete results.
     <br>
-    Iterative deepening consists first in searching for depth 1, then 2 and so on with the specific that westart each search with the path that got the best score previously. With alpha-beta pruning, searching depth 1, 2, 3 and then 4 successively with correct path ordering takes almost the same time as finding the best path at depth 4 directly.
+    Iterative deepening consists in first searching for depth 1, then depth 2 and so on with each new search initialized using the previously best-scoring path. With alpha-beta pruning, searching depth 1, 2, 3 and 4 successively with the best path first takes almost the same time as searching at depth 4 directly.
     <br>
     DIAGRAM?
     <br>
-    With the first path as the most important one, many optimizations are possible. The search framework can be upgraded into <em>principal variation search</em>. This method assumes that only the first path (principal) has to be searched up to the newer depth with a full bound of alpha and beta (also called a <em>window</em>). Secondary paths are searched with a null window which corresponds to a bound of beta-1 beta. DETAIL
+    With the first path as the most important one, many optimizations are possible. The search framework can be upgraded into <em>principal variation search</em> (PVS). This method assumes that only the first path (principal) has to be searched up to the newer depth with a full alpha-beta window. Secondary paths are searched with a null window which corresponds to a bound of [alpha-1, alpha]. Such method allows to quickly remove all worse paths with aggressive pruning.
+    <br>
+    During PVS, it can happen that a secondary path gives a result better than alpha, it is then necessary to re-do a search with a full window to improve the position. This is costly and can be avoided by improving the move ordering.
+    <br>
     PVS, Late move reductions.
 
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
+      Move Ordering
+    </h3>
+    With pruning, move ordering is a key factor of a chess engine. It is possible to sort move types into two categories, capturing moves and quiet moves.
+    <br>
+    Capturing moves are often changing board state more thant quiet moves and needs to be studied carefully by chess engines. Since chess piece types have different movesets, some are more valuable than other. Ranking captures can be done in multiple ways.
+    <br>
+    The most simple way is called <i>Most Valuable Victim - Least Valuable Attacker</i> (MVV-LVA). The best capture is the piece that has the less value on the board that takes the most valuable attacked piece.
+    <br>
+    This method only seek for a single capture but pieces are often defended, and it is more reliable to compute captures and re-captures. This is done with the Static Exchange Evaluation (SEE).
+    <h4 class="forehead undertow charming hella">
+      Static Exchange Evaluation
+    </h4>
+
+    SEE, transposition table
+    <h3 class="forehead undertow charming hella">
+      Reductions
+    </h3>
+
+    <h3 class="forehead undertow charming hella">
       Quiescence
     </h3>
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Staged Move Generation
     </h3>
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Magic Bitboard
     </h3>
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Transposition Table
     </h3>
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Piece-Square Table
     </h3>
-    <h3 class="forehead undertow charming hella +++">
+    <h3 class="forehead undertow charming hella">
       Tapered Evaluation
     </h3>
 

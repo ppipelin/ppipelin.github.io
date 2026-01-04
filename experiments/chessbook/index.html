@@ -98,7 +98,11 @@
     <br>
     If a depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and to avoid getting incomplete results.
     <br>
-    Iterative deepening is the fact thatwe first search depth 1, then 2 and so on with the specific that we first search the path that got the best score first. With alpha-beta pruning, searching depth 1, 2, 3 and then 4 successively with correct path ordering takes roughly the same time as finding the best path at depth 4 directly.
+    Iterative deepening consists first in searching for depth 1, then 2 and so on with the specific that westart each search with the path that got the best score previously. With alpha-beta pruning, searching depth 1, 2, 3 and then 4 successively with correct path ordering takes almost the same time as finding the best path at depth 4 directly.
+<br>
+DIAGRAM?
+<br>
+With the first path as the most important one, many optimisations are possible. The search framework can be upgraded into <em>principal variation search</em>. This method assumes that only the first path (principal) has to be searched up to the newer demth with a full bound of alpha and beta (also called a <em>window</em>). Secondary paths are searched with a null window wich corresponds to a bound of beta-1 beta. DETAIL
     PVS, Late move reductions.
 
     <h3 class="forehead undertow charming hella +++">

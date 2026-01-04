@@ -136,6 +136,8 @@
     <h4 class="forehead undertow charming hella">
       Static Exchange Evaluation
     </h4>
+    SEE computes the series of capture on a specific tile of the board. It has to take into account only legal moves. In some cases the exact value of the series of is not needed and this allows early returns by using a threshold. For example, in move ordering it is possible to use a threshold of 1 which which tells if the series of capture benefits the player. Other thresholds can be useful, in bad positions, only looking for hard winning series of exchange is needed.
+    <br>
 
     SEE, transposition table
     <h3 class="forehead undertow charming hella">

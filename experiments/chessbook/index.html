@@ -81,16 +81,23 @@
     <br>
     <br>
     Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
-
+    <h2 class="forehead undertow charming hella">
+      Board representations
+    </h2>
+    bitboard, array...
+    <h2 class="forehead undertow charming hella">
+      Move representations
+    </h2>
+    Encoding, update state (pinned...) on move.
     <h2 class="forehead undertow charming hella">
       Search and Evaluation
     </h2>
     A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
     <br>
-    To pick a move, the player has to visualize the future board state after doing the move and anticipate the opponent response in the list of all possible moves. This can be done multiple time an is called the <em>depth</em> of analysis.
+    To pick a move, the player has to visualize the future board state after doing the move and anticipate the opponent response in the list of all possible moves. This can be done multiple time and is called the <em>depth</em> of analysis.
     <br>
     <br>
-    All these combination of moves can be represented in a tree, the root being the starting position and first nodes being the first possible moves. In a chess engine looking for possible moves deeper and deeper in the tree is called <em>searching</em>, choosing the best leaf is called <em>evaluating</em>.
+    All these combinations of moves can be represented in a tree, the root being the starting position with the first nodes being the first possible moves. In a chess engine looking for possible moves deeper and deeper in the tree is called <em>searching</em>, choosing the best leaf is called <em>evaluating</em>.
     <br>
     In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula $ leaves = branching\_factor^{depth} $. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
 
@@ -99,7 +106,7 @@
     </h3>
     During the game, every player is looking for the best possible leaf in the tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will try to maximize the final score and the other one will try to minimize it. It is possible to trace a path in the tree that satisfies both players to eventually arrive at a leaf and evaluate the position.
     <br>
-    Since the game tree can be very long, most of the time a leaf will not be the final position of the game (win/draw/loss) but another, more advance state. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
+    Since the game tree can be very long, most of the time, a leaf will not be the final position of the game (win/draw/loss) but another, more advanced position. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
     <h3 class="forehead undertow charming hella">
       Alpha-Beta Pruning and Iterative Deepening
     </h3>

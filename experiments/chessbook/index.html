@@ -27,6 +27,58 @@
   <link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github.min.css">
   <link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css">
 
+  <!-- Post title automation -->
+  <style>
+    .post_title {
+      position: relative;
+    }
+
+    /* Icon in the left margin */
+    .post_title a .link-icon {
+      position: absolute;
+      left: -1.5em;
+      opacity: 0;
+    }
+
+    /* Show icon on hover */
+    .post_title:hover a .link-icon {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".post_title").forEach(h => {
+        if (h.querySelector("a"))
+          return;
+        const id = h.id;
+        if (!id)
+          return;
+
+        const text = h.textContent.trim();
+        h.textContent = "";
+        h.classList.add("forehead", "undertow", "charming", "hella", "anchor");
+
+        const a = document.createElement("a");
+        a.className = "relax";
+        a.href = `./#${id}`;
+
+        // Add Font Awesome link icon on the left
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-link link-icon";
+        a.appendChild(icon);
+
+        // Add the title text
+        const span = document.createElement("span");
+        span.textContent = text;
+        a.appendChild(span);
+
+        h.appendChild(a);
+      });
+    });
+  </script>
+
+  <script src="https://kit.fontawesome.com/ddb1b5eb41.js" crossorigin="anonymous"></script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Paul-Elie Pipelin">
@@ -35,20 +87,18 @@
   <meta name="theme-color" content="#36a1b0">
 
   <title>Paul-Élie Pipelin - The Ultimate Chess Programming Book</title>
-  <base href="/">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display:200,300|Quicksand:300,400|Roboto">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <link rel="stylesheet" href="styles.css">
-  <!-- <link rel="stylesheet" href="experiments/styles.css"> -->
-  <link rel="icon" type="image/x-icon" href="assets/Torch.png">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/x-icon" href="/assets/Torch.png">
 </head>
 
 <body>
-  <a class="finger hella bae-rock +" href="experiments/chessbook">
+  <a class="finger hella bae-rock +" href="/experiments/chessbook">
     english
   </a>
-  <a class="finger hella bae-rock +" href="experiments/chessbook">
+  <a class="finger hella bae-rock +" href="/experiments/chessbook">
     français
   </a>
 
@@ -61,28 +111,27 @@
   <!------------------------------------------------>
 
   <nav class="tight stormsurge +++">
-    <a class="finger bae-rock hella" href="">home</a>
-    <a class="finger bae-rock hella" href="experiments"><code>experiments</code></a>
+    <a class="finger bae-rock hella" href="/">home</a>
+    <a class="finger bae-rock hella" href="/experiments"><code>experiments</code></a>
   </nav>
 
   <!------------------------------------------------>
   <div class="book">
-    <h1 class="forehead undertow charming hella ++++">
+    <h1 class="forehead undertow charming hella ++++" id="title">
       The Ultimate Chess Programming Book
     </h1>
     This book describes all the elements that a decent chess engine can contain and is written for beginners in <a href="https://www.chessprogramming.org/Main_Page" , target="_blank">chess programming</a>.
     <br>
-    Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a>. Multiple good guides already exists alongside eponymous engines, like <a href="https://rustic-chess.org/" , target="_blank">Rustic</a> or <a href="http://mediocrechess.blogspot.com/" , target="_blank">Mediocre</a> but isn't exhaustive enough in my opinion.
-    <h2 class="forehead undertow charming hella">
-      Introduction
-    </h2>
+    Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a> often coming from <a class="finger inline bae-swat hella" href="https://github.com/ppipelin/radiance" target="_blank">Radiance</a> engine. Multiple good guides already exists alongside eponymous engines, like <a href="https://rustic-chess.org/" , target="_blank">Rustic</a> or <a href="http://mediocrechess.blogspot.com/" , target="_blank">Mediocre</a> but isn't exhaustive enough in my opinion.
+
+    <h2 class="post_title" id="introduction">Introduction</h2>
     Chess is a turn-based board game where all information are known at all time. Position is symmetrical with white color starting. Each piece type moves a certain way.
     <br>
     The king is the most important piece and cannot move to an attacked square. A game finishes when a player cannot move on its turn. At this moment, if its king is directly attacked by the opponent pieces (<em>in check</em>), the game is lost, (<em>checkmate</em>). Otherwise the game is a draw (<em>stalemate</em>).
     <br>
     <br>
     Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
-    <h2 class="forehead undertow charming hella">
+    <h2 class="post_title" id="board_representations">
       Board representations
     </h2>
     Let's first dive into the modeling of chess in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
@@ -115,7 +164,7 @@ pub inline fn popLsb(x: *u64) Square {
 }</code></pre>
     <pre><code class="language-rs">while (white_knights != 0)
   const white_knight_position: Square = popLsb(&white_knights);</code></pre>
-    <h2 class="forehead undertow charming hella">
+    <h2 class="post_title" id="move_representations">
       Move representations
     </h2>
     A minimal definition of a move is the <i>from</i> tile of the moving piece and the <i>to</i> tile. This can be extended with flags and can improve the code readability and performances. For example, knowing a move is a capture without verifying that the <i>to</i> tile is occupied provide a speedup.
@@ -128,7 +177,7 @@ pub inline fn popLsb(x: *u64) Square {
   from: u6,
   to: u6,
 };</code></pre>
-    <h2 class="forehead undertow charming hella">
+    <h2 class="post_title" id="search_and_evaluation">
       Search and Evaluation
     </h2>
     A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
@@ -140,13 +189,13 @@ pub inline fn popLsb(x: *u64) Square {
     <br>
     In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula $ leaves = branching\_factor^{depth} $. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
 
-    <h3 class="forehead undertow charming hella">
+    <h3 class="post_title" id="minimax">
       Minimax
     </h3>
     During the game, every player is looking for the best possible leaf in the tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will try to maximize the final score and the other one will try to minimize it. It is possible to trace a path in the tree that satisfies both players to eventually arrive at a leaf and evaluate the position.
     <br>
     Since the game tree can be very long, most of the time, a leaf will not be the final position of the game (win/draw/loss) but another, more advanced position. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
-    <h3 class="forehead undertow charming hella">
+    <h3 class="post_title" id="alpha-beta">
       Alpha-Beta Pruning and Iterative Deepening
     </h3>
     Minimax requires all the leaves to be evaluated but their number grows exponentially with depth. There is a way to prune some branches without reduce faithfulness and this can be done with alpha-beta pruning.
@@ -210,9 +259,9 @@ pub inline fn popLsb(x: *u64) Square {
     <br>
     PVS, Late move reductions.
 
-    <h3 class="forehead undertow charming hella">
+    <h2 class="post_title" id="move_ordering">
       Move Ordering
-    </h3>
+    </h2>
     With pruning, move ordering is a key factor of a chess engine. It is possible to sort move types into two categories, capturing moves and quiet moves.
     <br>
     Capturing moves are often changing board state more thant quiet moves and needs to be studied carefully by chess engines. Since chess piece types have different movesets, some are more valuable than other. Ranking captures can be done in multiple ways.
@@ -296,30 +345,28 @@ pub inline fn popLsb(x: *u64) Square {
 }</code></pre>
 
     SEE, transposition table
-    <h3 class="forehead undertow charming hella">
+    <h2 class="post_title" id="reductions">
       Reductions
-    </h3>
-
-    <h3 class="forehead undertow charming hella">
+    </h2>
+    <h2 class="post_title" id="quiescence">
       Quiescence
-    </h3>
-    <h3 class="forehead undertow charming hella">
+    </h2>
+    <h2 class="post_title" id="staged_move_generation">
       Staged Move Generation
-    </h3>
+    </h2>
     Update state pinned on move
-    <h3 class="forehead undertow charming hella">
+    <h2 class="post_title" id="magic_bitboard">
       Magic Bitboard
-    </h3>
-    <h3 class="forehead undertow charming hella">
+    </h2>
+    <h2 class="post_title" id="transposition_table">
       Transposition Table
-    </h3>
-    <h3 class="forehead undertow charming hella">
+    </h2>
+    <h2 class="post_title" id="piece-square_table">
       Piece-Square Table
-    </h3>
-    <h3 class="forehead undertow charming hella">
+    </h2>
+    <h2 class="post_title" id="tapered_evaluation">
       Tapered Evaluation
-    </h3>
-
+    </h2>
   </div>
 
   <div id="footer" class="forehead +++"></div>

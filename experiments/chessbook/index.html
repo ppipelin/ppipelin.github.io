@@ -12,6 +12,17 @@
       $("#footer").load("footer.html");
     });
   </script>
+  <!-- Formulas -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: { '[+]': [['$', '$']] }
+      }
+    };
+  </script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Paul-Elie Pipelin">
@@ -19,7 +30,7 @@
   <meta name="keywords" content="Chess, Book, Ultimate, Engineer, Paul-Elie, Pipelin, Digital, Imaging, Computer, Graphics">
   <meta name="theme-color" content="#36a1b0">
 
-  <title>Paul-Élie Pipelin - The Ultimate Chess Book</title>
+  <title>Paul-Élie Pipelin - The Ultimate Chess Programming Book</title>
   <base href="/">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat|Playfair+Display:200,300|Quicksand:300,400|Roboto">
@@ -45,19 +56,22 @@
 
   <!------------------------------------------------>
 
-  <nav class="tight stormsurge +++" aria-label="plunge" id="plunge">
+  <nav class="tight stormsurge +++">
     <a class="finger bae-rock hella" href="">home</a>
     <a class="finger bae-rock hella" href="experiments"><code>experiments</code></a>
   </nav>
 
   <!------------------------------------------------>
   <div class="book">
+    <h1 class="forehead undertow charming hella ++++">
+      The Ultimate Chess Programming Book
+    </h1>
     <h2 class="forehead undertow charming hella +++">
       Introduction
     </h2>
-    Chess is a turn-based board game where all informations are known at all time. Position is symmetrical with white color starting. Each piece type moves a certain way.
+    Chess is a turn-based board game where all information are known at all time. Position is symmetrical with white color starting. Each piece type moves a certain way.
     <br>
-    The king is the most important piece and cannot move to an attacekd square. A game finishes when a player cannot move on its turn. At this moment, if its king is directly attacked by the opponent pieces (<em>in check</em>), the game is lost, (<em>checkmate</em>). Otherwise the game is a draw (<em>stalemate</em>).
+    The king is the most important piece and cannot move to an attacked square. A game finishes when a player cannot move on its turn. At this moment, if its king is directly attacked by the opponent pieces (<em>in check</em>), the game is lost, (<em>checkmate</em>). Otherwise the game is a draw (<em>stalemate</em>).
     <br>
     <br>
     Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
@@ -67,61 +81,61 @@
     </h2>
     A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
     <br>
-    To pick a pick move, the player has to imagine the board state after doing the move and what the opponent would do in this case and pick a counter move in the list of all possible moves. This can be done multiple time an is called the <em>depth</em> of analysis.
+    To pick a move, the player has to visualize the future board state after doing the move and anticipate the opponent response in the list of all possible moves. This can be done multiple time an is called the <em>depth</em> of analysis.
     <br>
     <br>
-    All these combination of moves can be represented in a tree, the root being the starting position and first nodes being the first possible moves. In a chess engine looking for possible moves deeper and deeper in the tree is called <em>searching</em> while choosing the best leaf is called <em>evaluating</em>.`
+    All these combination of moves can be represented in a tree, the root being the starting position and first nodes being the first possible moves. In a chess engine looking for possible moves deeper and deeper in the tree is called <em>searching</em>, choosing the best leaf is called <em>evaluating</em>.
     <br>
-    In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula leaves = branching_factor^depth. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
+    In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula $ leaves = branching\_factor^{depth} $. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
 
     <h3 class="forehead undertow charming hella +++">
       Minimax
     </h3>
-    During the game, every player is looking for the best possible leaf in a tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will either try to maximize the final score and the other one will try to minimze it. It is possible to trace a path in the tree which satisfies both players to eventually arrive at a leaf and evaluate the position.
+    During the game, every player is looking for the best possible leaf in the tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will try to maximize the final score and the other one will try to minimize it. It is possible to trace a path in the tree that satisfies both players to eventually arrive at a leaf and evaluate the position.
     <br>
-    Since the game tree can be very long, most of the time a leaf will not be the final position of the game (win/draw/loss) but another, more advance state. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from tis new board state. This likelyhood of win is also called <em>score</em> and often spans from -30 to +30.
+    Since the game tree can be very long, most of the time a leaf will not be the final position of the game (win/draw/loss) but another, more advance state. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
     <h3 class="forehead undertow charming hella +++">
-      Alpha-beta pruning and iterative deepening
+      Alpha-Beta Pruning and Iterative Deepening
     </h3>
     Minimax requires all the leaves to be evaluated but their number grows exponentially with depth. There is a way to prune some branches without reduce faithfulness and this can be done with alpha-beta pruning.
     <br>
     Once a first leaf has been evaluated it gives a boundary of the attainable score for each player. Since the players want to either maximize or minimize the score value, none of them would take a path that could result in a worse score than a previously found one.
     <br>
-    Alpha and beta are bounds of final score. A path that will give a score higher than beta would never arise because the losing player would prefer to take the path that obtain a score of beta. Conversely, current player can avoid getting a lower score than alpha by taking the path of alpha. All paths outside of the alpha-beta bounds will be avoided by each player.
+    A path that will give a score higher than beta would never arise because the losing player would prefer to take the path that obtain a score of beta. Conversely, current player can avoid getting a lower score than alpha by taking the path of alpha. All paths outside of the alpha-beta bounds will be avoided by each player.
     <br>
     In chess, the likelihood of win is reversible, a the opponent of a player that has a 80% win has 20% chances of lose (or draw). Alpha and beta bounds can then be switched when changing to the other player point of view and the score can be negated. This is called newer version of minimax is called negamax.
     <br>
     CODE
     <br>
-    With alpha-beta pruning, the first evaluated paths they give narrower alpha-beta bounds, if the best path is selected first, most of the others will be prune and very few evaluations will be necessary. With this characterics emerges <em>iterative deepening</em>.
+    The first evaluated paths give alpha-beta bounds, if the best path is selected first the narrower the bound will be and the closer it will be to the actual score of the position. With a smaller bound, most of the other paths will be pruned and very few evaluations will be necessary. With these characterics emerges <em>iterative deepening</em>.
     <br>
     <br>
-    If a depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and to avoid getting incomplete results.
+    A depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and to avoid getting incomplete results.
     <br>
     Iterative deepening consists first in searching for depth 1, then 2 and so on with the specific that westart each search with the path that got the best score previously. With alpha-beta pruning, searching depth 1, 2, 3 and then 4 successively with correct path ordering takes almost the same time as finding the best path at depth 4 directly.
-<br>
-DIAGRAM?
-<br>
-With the first path as the most important one, many optimisations are possible. The search framework can be upgraded into <em>principal variation search</em>. This method assumes that only the first path (principal) has to be searched up to the newer demth with a full bound of alpha and beta (also called a <em>window</em>). Secondary paths are searched with a null window wich corresponds to a bound of beta-1 beta. DETAIL
+    <br>
+    DIAGRAM?
+    <br>
+    With the first path as the most important one, many optimizations are possible. The search framework can be upgraded into <em>principal variation search</em>. This method assumes that only the first path (principal) has to be searched up to the newer depth with a full bound of alpha and beta (also called a <em>window</em>). Secondary paths are searched with a null window which corresponds to a bound of beta-1 beta. DETAIL
     PVS, Late move reductions.
 
     <h3 class="forehead undertow charming hella +++">
       Quiescence
     </h3>
     <h3 class="forehead undertow charming hella +++">
-      Staged move generation
+      Staged Move Generation
     </h3>
     <h3 class="forehead undertow charming hella +++">
-      Magic bitboard
+      Magic Bitboard
     </h3>
     <h3 class="forehead undertow charming hella +++">
-      Transposition table
+      Transposition Table
     </h3>
     <h3 class="forehead undertow charming hella +++">
-      Piece-square table
+      Piece-Square Table
     </h3>
     <h3 class="forehead undertow charming hella +++">
-      Tapered evaluation
+      Tapered Evaluation
     </h3>
 
   </div>

@@ -71,7 +71,9 @@
     <h1 class="forehead undertow charming hella ++++">
       The Ultimate Chess Programming Book
     </h1>
-    This book describes the elements that a chess engine can contain. Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a>.
+    This book describes all the elements that a decent chess engine can contain and is written for beginners in <a href="https://www.chessprogramming.org/Main_Page" , target="_blank">chess programming</a>.
+    <br>
+    Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a>. Multiple good guides already exists alongside eponymous engines, like <a href="https://rustic-chess.org/" , target="_blank">Rustic</a> or <a href="http://mediocrechess.blogspot.com/" , target="_blank">Mediocre</a> but isn't exhaustive enough in my opinion.
     <h2 class="forehead undertow charming hella">
       Introduction
     </h2>
@@ -84,11 +86,49 @@
     <h2 class="forehead undertow charming hella">
       Board representations
     </h2>
-    bitboard, array...
+    Let's first dive into the modeling of chess game in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
+    <br>
+    A common implementation is through mailbox, an array with the size (or bigger) of the board that contains pieces.
+    <pre><code class="language-rs">const board: [64]Piece = @splat(Piece.none);
+// or
+const board: [8][8]Piece = @splat(@splat(Piece.none));</code></pre>
+    This is convenient to quickly assert which piece is on a specific tiles but has some drawbacks:
+    <ul>
+      <li>Memory cost</li>
+      <li>Accession cost</li>
+      <li>Operations are item by item</li>
+    </ul>
+    Such issues can be mitigated with bitboards. This method stores makes the corresponding between a tile on the board ans a bit of an integer, with an 8 by 8 board, a chess bitboard requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise and between bitboards such as:
+    <pre><code class="language-rs">const bb_pieces: [PieceType.nb()]u64 = @splat(0);
+const bb_color: [Color.nb()]u64 = @splat(0);
+... // Fill bitboards
+
+const white_knights: u64 = bb_pieces[PieceType.knight] & bb_color[Color.white];</code></pre>
+    Extracting the position of a piece in a bitboard can be done with bit manipulation functions by computing the least bit function.
+    <pre><code class="language-rs">pub inline fn lsb(x: u64) u7 {
+  return @ctz(x);
+}
+
+pub inline fn popLsb(x: *u64) Square {
+  const l: u7 = lsb(x.*);
+  x.* &= x.* - 1;
+  return @enumFromInt(l);
+}</code></pre>
+    <pre><code class="language-rs">while (white_knights != 0)
+  const white_knight_position: Square = popLsb(&white_knights);</code></pre>
     <h2 class="forehead undertow charming hella">
       Move representations
     </h2>
-    Encoding, update state (pinned...) on move.
+    A minimal definition of a move is the <i>from</i> tile of the moving piece and the <i>to</i> tile. This can be extended with flags and can improve the code readability and performances. For example, knowing a move is a capture without verifying that the <i>to</i> tile is occupied provide a speedup.
+    <br>
+    With a maximum value of 64, <i>from</i> and <i>to</i> tiles can be stored in a 6 bits integer and the 16 types of flags can be stored with 4 bits. This is convenient as an move then requires 16 bits which can be stored into an integer, data can be access with bit shifting.
+    <br>
+    With Zig elegant packed struct no shifting mechanics are needed:
+    <pre><code class="language-rs">pub const Move = packed struct {
+  flags: u4 = MoveFlags.quiet.index(),
+  from: u6,
+  to: u6,
+};</code></pre>
     <h2 class="forehead undertow charming hella">
       Search and Evaluation
     </h2>
@@ -118,7 +158,43 @@
     <br>
     In chess, the likelihood of win is reversible, a the opponent of a player that has a 80% win has 20% chances of lose (or draw). Alpha and beta bounds can then be switched when changing to the other player point of view and the score can be negated. This newer version of minimax is called negamax.
     <br>
-    CODE
+    <pre><code class="language-rs">fn negamax(alpha : Value, beta : Value, depth: u8) Value {
+
+  // Termination, leaf evaluation
+  if (current_depth <= 0) {
+    return evaluation();
+  }
+
+  var score: Value = -value_none;
+
+  // Loop over all legal moves
+  for (legal_moves) |move| {
+    position.movePiece(move);
+
+    // Transposition Table probing for early return
+
+    score = negamax(-beta, -alpha, depth - 1);
+
+    position.unMovePiece(move);
+
+    if (score > alpha) {
+      // Fail-high, opponent won't take this path
+      if (score >= beta) {
+        break;
+      } else {
+        // Found better alpha
+        alpha = score;
+      }
+    }
+  }
+
+  // If no move stalemate or checkmate
+  if (score == -value_none) {
+    if (pos.state.checkers != 0)
+      return -value_mate + ply_number;
+    return value_stalemate;
+  }
+};</code></pre>
     <br>
     The first evaluated paths give alpha-beta bounds, also called <em>windows</em>, if the best path is selected first, the narrower the window will be, and the closer it will be to the actual score of the position. With a smaller window, most of the remaining paths will be pruned and very few evaluations will be necessary. With these characterics emerges <em>iterative deepening</em>.
     <br>
@@ -231,6 +307,7 @@
     <h3 class="forehead undertow charming hella">
       Staged Move Generation
     </h3>
+    Update state pinned on move
     <h3 class="forehead undertow charming hella">
       Magic Bitboard
     </h3>

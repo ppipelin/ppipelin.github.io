@@ -223,8 +223,9 @@ a.relax{
 }
 
 .book {
-	width: 80%;
+	width: 60%;
 	min-width: 20rem;
+	margin: 0 auto;
 }
 
 /* Bae : https://github.com/s9a/bae */

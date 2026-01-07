@@ -6,10 +6,14 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E58GKHEECC"></script>
   <script>  window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-E58GKHEECC');</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/theme.js" defer></script>
   <script>
     $(function () {
-      $("#header").load("header.html");
-      $("#footer").load("footer.html");
+      $("#header").load("header.html", function () {
+        $("#footer").load("footer.html", function () {
+          initTheme();
+        });
+      });
     });
   </script>
   <!-- Formulas -->
@@ -27,6 +31,8 @@
   <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
   <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
   <script>hljs.highlightAll();</script>
+  <link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github.min.css">
+  <link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css">
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -86,19 +92,19 @@
     <h2 class="forehead undertow charming hella">
       Board representations
     </h2>
-    Let's first dive into the modeling of chess game in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
+    Let's first dive into the modeling of chess in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
     <br>
-    A common implementation is through mailbox, an array with the size (or bigger) of the board that contains pieces.
+    A common implementation is through mailbox, an array with the size of the board (or bigger) that contains pieces.
     <pre><code class="language-rs">const board: [64]Piece = @splat(Piece.none);
 // or
 const board: [8][8]Piece = @splat(@splat(Piece.none));</code></pre>
-    This is convenient to quickly assert which piece is on a specific tiles but has some drawbacks:
+    This is convenient to quickly assert which piece type is on a specific tile but has some drawbacks:
     <ul>
       <li>Memory cost</li>
       <li>Accession cost</li>
-      <li>Operations are item by item</li>
+      <li>Operations are tile by tile</li>
     </ul>
-    Such issues can be mitigated with bitboards. This method stores makes the corresponding between a tile on the board ans a bit of an integer, with an 8 by 8 board, a chess bitboard requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise and between bitboards such as:
+    Such issues can be mitigated with bitboards. A bitboard makes the corresponding between a tile on the board and a bit of an integer. For an 8 by 8 chess board, this requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise and between bitboards such as:
     <pre><code class="language-rs">const bb_pieces: [PieceType.nb()]u64 = @splat(0);
 const bb_color: [Color.nb()]u64 = @splat(0);
 ... // Fill bitboards

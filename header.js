@@ -13,11 +13,18 @@ if (!theme) {
 document.documentElement.dataset.theme = theme;
 updateHljsTheme(theme);
 
-$(function () {
-  $("#header").load("/header.html", function () {
+document.addEventListener("DOMContentLoaded", async () => {
+  const header = document.getElementById("header");
+  const footer = document.getElementById("footer");
+
+  if (header) {
+    header.innerHTML = await fetch("/header.html").then(r => r.text());
     initTheme();
-    $("#footer").load("/footer.html");
-  });
+  }
+
+  if (footer) {
+    footer.innerHTML = await fetch("/footer.html").then(r => r.text());
+  }
 });
 
 function updateHljsTheme(theme) {
@@ -37,4 +44,21 @@ function updateHljsTheme(theme) {
     light.style.display = "";
     dark.style.display = "none";
   }
+}
+
+function initTheme() {
+  const toggle = document.getElementById("dark-mode-toggle");
+  if (!toggle) return;
+
+  let theme = localStorage.getItem("theme");
+
+  toggle.checked = theme === "dark";
+
+  // Listen for changes
+  toggle.addEventListener("change", () => {
+    const theme = toggle.checked ? "dark" : "light";
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("theme", theme);
+    updateHljsTheme(theme);
+  });
 }

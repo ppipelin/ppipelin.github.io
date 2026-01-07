@@ -23,6 +23,11 @@
     };
   </script>
 
+  <!-- Code display -->
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="author" content="Paul-Elie Pipelin">
@@ -138,6 +143,75 @@
     </h4>
     SEE computes the series of capture on a specific tile of the board. It has to take into account only legal moves. In some cases the exact value of the series of is not needed and this allows early returns by using a threshold. For example, in move ordering it is possible to use a threshold of 1 which which tells if the series of capture benefits the player. Other thresholds can be useful, in bad positions, only looking for hard winning series of exchange is needed.
     <br>
+
+    <pre><code class="language-rs">pub fn seeGreaterEqual(move: Move, threshold: Value) bool {
+
+  if (move.isEnPassant())
+  return threshold >= value_zero;
+
+  const from: Square = move.getFrom();
+  const to: Square = move.getTo();
+  const from_piece: Piece = pos.board[from];
+  const to_piece: Piece = pos.board[to];
+
+  var see = material_values[to_piece.pieceToPieceType()] - threshold;
+
+  // Cannot gain more than initial piece
+  // Opponent would not give us more
+  if (see < 0)
+    return false;
+
+  see = tables.material[from_piece.pieceToPieceType()] - see;
+
+  // If we took a valuable piece from a least valuable piece
+  //   with a difference above threshold we exit
+  // Equivalent to MVV-LVA
+  if (see <= 0) {
+    return true;
+  }
+
+  position.movePiece(move);
+
+  var result: bool = true;
+
+  // Begin series of exchange
+  while (true) {
+    position.updateBlockersAndPinned();
+    position.updateAttackersAndDefenders(); // set attackers and defenders
+
+    // Cannot defend piece
+    if (position.attackers == 0)
+      break;
+
+    result = !result;
+
+    // Search for least valuable attacker type
+    // Remove it, add new attackers and change turn
+    for (std.enums.values(types.PieceType)) |pt| {
+
+      // If capture with king but opponent still has attackers we lose
+      if (pt == .king)
+          return if (position.defenders > 0) !result else result;
+
+      // Look for PieceType in attackers
+      const bb: Bitboard = pos.attackers & pos.bb_pieces[pt.index()];
+      if (bb == 0)
+        continue;
+
+      // Update SEE score if found
+      see = tables.material[pt.index()] - see;
+
+      const new_move = computeNewMove();
+      position.movePiece(new_move);
+    }
+
+    // Early break because retaking was not worth it from current
+    if (see < @intFromBool(result))
+      break;
+  }
+
+  return result;
+}</code></pre>
 
     SEE, transposition table
     <h3 class="forehead undertow charming hella">

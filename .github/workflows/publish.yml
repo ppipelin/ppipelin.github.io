@@ -11,30 +11,45 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
           submodules: true
-
       - name: Using en as default
         run: cp -a ./en/. ./
-
-      - name: Publish to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   htmlChecks:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           lfs: true
           submodules: true
@@ -62,4 +77,4 @@ jobs:
       # https://github.com/gjtorikian/html-proofer/blob/main/bin/htmlproofer
       - name: Executing html-proofer
         run: |
-          htmlproofer ./ --ignore-status-codes "999" --allow_missing_href true --ignore-urls "/glennkerbiriou.yj.fr/,/https://www.researchgate.net/profile/Pascal_Grittmann/publication/334433762_Optimal_multiple_importance_sampling/links/5d2c695da6fdcc2462e12f96/Optimal-multiple-importance-sampling.pdf/"
+          htmlproofer ./ --ignore-status-codes "999" --allow_missing_href true --ignore-urls "/glennkerbiriou.yj.fr/,/https://www.researchgate.net/profile/Pascal_Grittmann/publication/334433762_Optimal_multiple_importance_sampling/links/5d2c695da6fdcc2462e12f96/Optimal-multiple-importance-sampling.pdf/,/https://www.shadertoy.com/view/wlyGWc/"

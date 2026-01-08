@@ -96,6 +96,69 @@ body {
 	color: var(--color);
 }
 
+.header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+}
+
+.toggle {
+	display: inline-block;
+	width: 60px;
+	height: 30px;
+	background: var(--rock);
+	border-radius: 30px;
+	position: relative;
+	cursor: pointer;
+	transition: background 0.4s;
+}
+
+.toggle::before {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 24px;
+	height: 24px;
+	background: var(--antirock);
+	border-radius: 50%;
+	transition: transform 0.4s;
+}
+
+#dark-mode-toggle {
+	display: none;
+}
+
+#dark-mode-toggle:checked+.toggle::before {
+	transform: translateX(30px);
+}
+
+h1 {
+	font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h2 {
+	font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+
+h3 {
+	font-size: clamp(1.3rem, 2vw, 1.75rem);
+}
+
+h4 {
+	font-size: clamp(1rem, 1vw, 1.5rem);
+}
+
+h1 {
+	line-height: 2em;
+}
+
 img.full {
 	max-width: 100%;
 	max-height: 100%;
@@ -116,10 +179,10 @@ img.full {
 
 a {
 	text-decoration: underline;
-	color:var(--link);
+	color: var(--link);
 }
 
-a.relax{
+a.relax {
 	text-decoration: inherit;
 	color: inherit;
 }
@@ -191,37 +254,6 @@ a.relax{
 	font-size: 0.8em;
 }
 
-#dark-mode-toggle {
-	display: none;
-}
-
-.toggle {
-	display: inline-block;
-	width: 60px;
-	height: 30px;
-	background: var(--rock);
-	border-radius: 30px;
-	position: relative;
-	cursor: pointer;
-	transition: background 0.4s;
-}
-
-.toggle::before {
-	content: "";
-	position: absolute;
-	top: 3px;
-	left: 3px;
-	width: 24px;
-	height: 24px;
-	background: var(--antirock);
-	border-radius: 50%;
-	transition: transform 0.4s;
-}
-
-#dark-mode-toggle:checked+.toggle::before {
-	transform: translateX(30px);
-}
-
 /* Bae : https://github.com/s9a/bae */
 .bae-clean:not(.bae-unclean) { background:transparent; color:inherit }
 .bae-flat:not(.bae-unflat),
@@ -248,7 +280,7 @@ a.relax{
 .bae-swat{ color:var(--golt) !important; background:var(--swat) !important; }
 .bae-chess{ color:var(--chesslight) !important; background:var(--chessdark) !important; }
 
-/*Responsive*/
+/* Responsive */
 @media (max-width: 575px) {
 	h1 {
 		font-size: 1.5rem;
@@ -260,6 +292,10 @@ a.relax{
 
 	h3 {
 		font-size: 1rem;
+	}
+
+	h4 {
+		font-size: 0.8rem;
 	}
 
 	.row {

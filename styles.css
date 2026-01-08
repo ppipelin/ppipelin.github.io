@@ -254,6 +254,12 @@ a.relax {
 	font-size: 0.8em;
 }
 
+.book {
+	width: 60%;
+	min-width: 20rem;
+	margin: 0 auto;
+}
+
 /* Bae : https://github.com/s9a/bae */
 .bae-clean:not(.bae-unclean) { background:transparent; color:inherit }
 .bae-flat:not(.bae-unflat),

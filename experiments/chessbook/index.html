@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <script src="/header.js"></script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-E58GKHEECC"></script>
+  <script>  window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-E58GKHEECC');</script>
+
+  <!-- Formulas -->
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: { '[+]': [['$', '$']] }
+      }
+    };
+  </script>
+
+  <!-- Code display -->
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
+  <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+  <script>hljs.highlightAll();</script>
+  <link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github.min.css">
+  <link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css">
+
+  <!-- Post title automation -->
+  <style>
+    .post_title {
+      position: relative;
+    }
+
+    /* Icon in the left margin */
+    .post_title a .link-icon {
+      position: absolute;
+      left: -1.5em;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+    }
+
+    /* Show icon on hover */
+    .post_title:hover a .link-icon {
+      opacity: 1;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll(".post_title").forEach(h => {
+        if (h.querySelector("a"))
+          return;
+        const id = h.id;
+        if (!id)
+          return;
+
+        const text = h.textContent.trim();
+        h.textContent = "";
+        h.classList.add("forehead", "undertow", "charming", "hella", "anchor");
+
+        const a = document.createElement("a");
+        a.className = "relax";
+        a.href = `./#${id}`;
+
+        // Add Font Awesome link icon on the left
+        const icon = document.createElement("i");
+        icon.className = "fa-solid fa-link link-icon";
+        a.appendChild(icon);
+
+        // Add the title text
+        const span = document.createElement("span");
+        span.textContent = text;
+        a.appendChild(span);
+
+        h.appendChild(a);
+      });
+    });
+  </script>
+
+  <script src="https://kit.fontawesome.com/ddb1b5eb41.js" crossorigin="anonymous"></script>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Paul-Elie Pipelin">
+  <meta name="description" content="The Ultimate Chess Programming Book. Personal site of Paul-Elie Pipelin, engineer in digital imaging.">
+  <meta name="keywords" content="Chess, Book, Ultimate, Engineer, Paul-Elie, Pipelin, Digital, Imaging, Computer, Graphics">
+  <meta name="theme-color" content="#36a1b0">
+
+  <title>Paul-Élie Pipelin - The Ultimate Chess Programming Book</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,550;1,400;1,550&family=Quicksand:wght@400;550&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/x-icon" href="/assets/Torch.png">
+</head>
+
+<body>
+  <a class="finger hella bae-rock +" href="/experiments/chessbook">
+    english
+  </a>
+  <a class="finger hella bae-rock +" href="/experiments/chessbook">
+    français
+  </a>
+
+  <header id="header">
+    <h1 class="forehead undertow charming hella ++++">
+      Paul-Élie Pipelin
+    </h1>
+  </header>
+
+  <!------------------------------------------------>
+
+  <nav class="tight stormsurge +++">
+    <a class="finger bae-rock hella" href="/">home</a>
+    <a class="finger bae-rock hella" href="/experiments"><code>experiments</code></a>
+  </nav>
+
+  <!------------------------------------------------>
+  <div class="book">
+    <h1 class="forehead undertow charming hella ++++" id="title">
+      The Ultimate Chess Programming Book
+    </h1>
+    This book describes all the elements that a decent chess engine can contain and is written for beginners in <a href="https://www.chessprogramming.org/Main_Page" , target="_blank">chess programming</a>.
+    <br>
+    Some parts are illustrated with code written in <a href="https://ziglang.org/" target="_blank">Zig</a> often coming from <a class="finger inline bae-swat hella" href="https://github.com/ppipelin/radiance" target="_blank">Radiance</a> engine. Multiple good guides already exists alongside eponymous engines, like <a href="https://rustic-chess.org/" , target="_blank">Rustic</a> or <a href="http://mediocrechess.blogspot.com/" , target="_blank">Mediocre</a> but isn't exhaustive enough in my opinion.
+
+    <h2 class="post_title" id="introduction">Introduction</h2>
+    Chess is a turn-based board game where all information are known at all time. Position is symmetrical with white color starting. Each piece type moves a certain way.
+    <br>
+    The king is the most important piece and cannot move to an attacked square. A game finishes when a player cannot move on its turn. At this moment, if its king is directly attacked by the opponent pieces (<em>in check</em>), the game is lost, (<em>checkmate</em>). Otherwise the game is a draw (<em>stalemate</em>).
+    <br>
+    <br>
+    Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
+    <h2 class="post_title" id="board_representations">
+      Board representations
+    </h2>
+    Let's first dive into the modeling of chess in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
+    <br>
+    A common implementation is through mailbox, an array with the size of the board (or bigger) that contains pieces.
+    <pre><code class="language-rs">const board: [64]Piece = @splat(Piece.none);
+// or
+const board: [8][8]Piece = @splat(@splat(Piece.none));</code></pre>
+    This is convenient to quickly assert which piece type is on a specific tile but has some drawbacks:
+    <ul>
+      <li>Memory cost</li>
+      <li>Accession cost</li>
+      <li>Operations are tile by tile</li>
+    </ul>
+    Such issues can be mitigated with bitboards. A bitboard makes the corresponding between a tile on the board and a bit of an integer. For an 8 by 8 chess board, this requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise and between bitboards such as:
+    <pre><code class="language-rs">const bb_pieces: [PieceType.nb()]u64 = @splat(0);
+const bb_color: [Color.nb()]u64 = @splat(0);
+... // Fill bitboards
+
+const white_knights: u64 = bb_pieces[PieceType.knight] & bb_color[Color.white];</code></pre>
+    Extracting the position of a piece in a bitboard can be done with bit manipulation functions by computing the least bit function.
+    <pre><code class="language-rs">pub inline fn lsb(x: u64) u7 {
+  return @ctz(x);
+}
+
+pub inline fn popLsb(x: *u64) Square {
+  const l: u7 = lsb(x.*);
+  x.* &= x.* - 1;
+  return @enumFromInt(l);
+}</code></pre>
+    <pre><code class="language-rs">while (white_knights != 0)
+  const white_knight_position: Square = popLsb(&white_knights);</code></pre>
+    <h2 class="post_title" id="move_representations">
+      Move representations
+    </h2>
+    A minimal definition of a move is the <i>from</i> tile of the moving piece and the <i>to</i> tile. This can be extended with flags and can improve the code readability and performances. For example, knowing a move is a capture without verifying that the <i>to</i> tile is occupied provide a speedup.
+    <br>
+    With a maximum value of 64, <i>from</i> and <i>to</i> tiles can be stored in a 6 bits integer and the 16 types of flags can be stored with 4 bits. This is convenient as an move then requires 16 bits which can be stored into an integer, data can be access with bit shifting.
+    <br>
+    With Zig elegant packed struct no shifting mechanics are needed:
+    <pre><code class="language-rs">pub const Move = packed struct {
+  flags: u4 = MoveFlags.quiet.index(),
+  from: u6,
+  to: u6,
+};</code></pre>
+    <h2 class="post_title" id="search_and_evaluation">
+      Search and Evaluation
+    </h2>
+    A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
+    <br>
+    To pick a move, the player has to visualize the future board state after doing the move and anticipate the opponent response in the list of all possible moves. This can be done multiple time and is called the <em>depth</em> of analysis.
+    <br>
+    <br>
+    All these combinations of moves can be represented in a tree, the root being the starting position with the first nodes being the first possible moves. In a chess engine looking for possible moves deeper and deeper in the tree is called <em>searching</em>, choosing the best leaf is called <em>evaluating</em>.
+    <br>
+    In general, chess game trees have a branching factor of around 30, it is possible to compute the number of leaves for a specific depth with the formula $ leaves = branching\_factor^{depth} $. Hence at depth of 5 is 24 millions leaves while a depth of 8 is 656 billions. A standard chess game has a depth of around 80.
+
+    <h3 class="post_title" id="minimax">
+      Minimax
+    </h3>
+    During the game, every player is looking for the best possible leaf in the tree. This behavior can be modeled with a <em>minimax algorithm</em>. At each node, a player will try to maximize the final score and the other one will try to minimize it. It is possible to trace a path in the tree that satisfies both players to eventually arrive at a leaf and evaluate the position.
+    <br>
+    Since the game tree can be very long, most of the time, a leaf will not be the final position of the game (win/draw/loss) but another, more advanced position. Chess engine evaluations have to use heuristics to determine <i>how likely</i> is the win from this new board state. This likelihood of win is also called <em>score</em> and often spans from -30 to +30.
+    <h3 class="post_title" id="alpha-beta">
+      Alpha-Beta Pruning and Iterative Deepening
+    </h3>
+    Minimax requires all the leaves to be evaluated but their number grows exponentially with depth. There is a way to prune some branches without reduce faithfulness and this can be done with alpha-beta pruning.
+    <br>
+    Once a first leaf has been evaluated it gives a boundary of the attainable score for each player. Since the players want to either maximize or minimize the score value, none of them would take a path that could result in a worse score than a previously found one.
+    <br>
+    A path that will give a score higher than beta would never arise because the losing player would prefer to take the path that obtain a score of beta. Conversely, current player can avoid getting a lower score than alpha by taking the path of alpha. All paths outside of the alpha-beta bounds will be avoided by each player.
+    <br>
+    In chess, the likelihood of win is reversible, a the opponent of a player that has a 80% win has 20% chances of lose (or draw). Alpha and beta bounds can then be switched when changing to the other player point of view and the score can be negated. This newer version of minimax is called negamax.
+    <br>
+    <pre><code class="language-rs">fn negamax(alpha : Value, beta : Value, depth: u8) Value {
+
+  // Termination, leaf evaluation
+  if (current_depth <= 0) {
+    return evaluation();
+  }
+
+  var score: Value = -value_none;
+
+  // Loop over all legal moves
+  for (legal_moves) |move| {
+    position.movePiece(move);
+
+    // Transposition Table probing for early return
+
+    score = negamax(-beta, -alpha, depth - 1);
+
+    position.unMovePiece(move);
+
+    if (score > alpha) {
+      // Fail-high, opponent won't take this path
+      if (score >= beta) {
+        break;
+      } else {
+        // Found better alpha
+        alpha = score;
+      }
+    }
+  }
+
+  // If no move stalemate or checkmate
+  if (score == -value_none) {
+    if (pos.state.checkers != 0)
+      return -value_mate + ply_number;
+    return value_stalemate;
+  }
+};</code></pre>
+    <br>
+    The first evaluated paths give alpha-beta bounds, also called <em>windows</em>, if the best path is selected first, the narrower the window will be, and the closer it will be to the actual score of the position. With a smaller window, most of the remaining paths will be pruned and very few evaluations will be necessary. With these characterics emerges <em>iterative deepening</em>.
+    <br>
+    <br>
+    A depth of 80 is not attainable with time (and memory) constraints, it is necessary to select a specific depth and avoid getting incomplete results.
+    <br>
+    Iterative deepening consists in first searching for depth 1, then depth 2 and so on with each new search initialized using the previously best-scoring path. With alpha-beta pruning, searching depth 1, 2, 3 and 4 successively with the best path first takes almost the same time as searching at depth 4 directly.
+    <br>
+    DIAGRAM?
+    <br>
+    With the first path as the most important one, many optimizations are possible. The search framework can be upgraded into <em>principal variation search</em> (PVS). This method assumes that only the first path (principal) has to be searched up to the newer depth with a full alpha-beta window. Secondary paths are searched with a null window which corresponds to a bound of [alpha-1, alpha]. Such method allows to quickly remove all worse paths with aggressive pruning.
+    <br>
+    During PVS, it can happen that a secondary path gives a result better than alpha, it is then necessary to re-do a search with a full window to improve the position. This is costly and can be avoided by improving the move ordering.
+    <br>
+    PVS, Late move reductions.
+
+    <h2 class="post_title" id="move_ordering">
+      Move Ordering
+    </h2>
+    With pruning, move ordering is a key factor of a chess engine. It is possible to sort move types into two categories, capturing moves and quiet moves.
+    <br>
+    Capturing moves are often changing board state more thant quiet moves and needs to be studied carefully by chess engines. Since chess piece types have different movesets, some are more valuable than other. Ranking captures can be done in multiple ways.
+    <br>
+    The most simple way is called <i>Most Valuable Victim - Least Valuable Attacker</i> (MVV-LVA). The best capture is the piece that has the less value on the board that takes the most valuable attacked piece.
+    <br>
+    This method only seek for a single capture but pieces are often defended, and it is more reliable to compute captures and re-captures. This is done with the Static Exchange Evaluation (SEE).
+    <h4 class="forehead undertow charming hella">
+      Static Exchange Evaluation
+    </h4>
+    SEE computes the series of capture on a specific tile of the board. It has to take into account only legal moves. In some cases the exact value of the series of is not needed and this allows early returns by using a threshold. For example, in move ordering it is possible to use a threshold of 1 which which tells if the series of capture benefits the player. Other thresholds can be useful, in bad positions, only looking for hard winning series of exchange is needed.
+    <br>
+
+    <pre><code class="language-rs">pub fn seeGreaterEqual(move: Move, threshold: Value) bool {
+
+  if (move.isEnPassant())
+  return threshold >= value_zero;
+
+  const from: Square = move.getFrom();
+  const to: Square = move.getTo();
+  const from_piece: Piece = pos.board[from];
+  const to_piece: Piece = pos.board[to];
+
+  var see = material_values[to_piece.pieceToPieceType()] - threshold;
+
+  // Cannot gain more than initial piece
+  // Opponent would not give us more
+  if (see < 0)
+    return false;
+
+  see = tables.material[from_piece.pieceToPieceType()] - see;
+
+  // If we took a valuable piece from a least valuable piece
+  //   with a difference above threshold we exit
+  // Equivalent to MVV-LVA
+  if (see <= 0) {
+    return true;
+  }
+
+  position.movePiece(move);
+
+  var result: bool = true;
+
+  // Begin series of exchange
+  while (true) {
+    position.updateBlockersAndPinned();
+    position.updateAttackersAndDefenders(); // set attackers and defenders
+
+    // Cannot defend piece
+    if (position.attackers == 0)
+      break;
+
+    result = !result;
+
+    // Search for least valuable attacker type
+    // Remove it, add new attackers and change turn
+    for (std.enums.values(types.PieceType)) |pt| {
+
+      // If capture with king but opponent still has attackers we lose
+      if (pt == .king)
+          return if (position.defenders > 0) !result else result;
+
+      // Look for PieceType in attackers
+      const bb: Bitboard = pos.attackers & pos.bb_pieces[pt.index()];
+      if (bb == 0)
+        continue;
+
+      // Update SEE score if found
+      see = tables.material[pt.index()] - see;
+
+      const new_move = computeNewMove();
+      position.movePiece(new_move);
+    }
+
+    // Early break because retaking was not worth it from current
+    if (see < @intFromBool(result))
+      break;
+  }
+
+  return result;
+}</code></pre>
+
+    SEE, transposition table
+    <h2 class="post_title" id="reductions">
+      Reductions
+    </h2>
+    <h2 class="post_title" id="quiescence">
+      Quiescence
+    </h2>
+    <h2 class="post_title" id="staged_move_generation">
+      Staged Move Generation
+    </h2>
+    Update state pinned on move
+    <h2 class="post_title" id="magic_bitboard">
+      Magic Bitboard
+    </h2>
+    <h2 class="post_title" id="transposition_table">
+      Transposition Table
+    </h2>
+    <h2 class="post_title" id="piece-square_table">
+      Piece-Square Table
+    </h2>
+    <h2 class="post_title" id="tapered_evaluation">
+      Tapered Evaluation
+    </h2>
+  </div>
+
+  <footer id="footer" class="forehead +++"></footer>
+</body>
+
+</html>

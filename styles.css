@@ -248,7 +248,7 @@ a.relax{
 .bae-swat{ color:var(--golt) !important; background:var(--swat) !important; }
 .bae-chess{ color:var(--chesslight) !important; background:var(--chessdark) !important; }
 
-/*Responsive*/
+/* Responsive */
 @media (max-width: 575px) {
 	h1 {
 		font-size: 1.5rem;
@@ -260,6 +260,10 @@ a.relax{
 
 	h3 {
 		font-size: 1rem;
+	}
+
+	h4 {
+		font-size: 0.8rem;
 	}
 
 	.row {

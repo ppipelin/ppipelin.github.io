@@ -7,9 +7,26 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-E58GKHEECC"></script>
   <script>  window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'G-E58GKHEECC');</script>
 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Paul-Elie Pipelin">
+  <meta name="description" content="The Ultimate Chess Programming Book. Personal site of Paul-Elie Pipelin, engineer in digital imaging.">
+  <meta name="keywords" content="Chess, Book, Ultimate, Engineer, Paul-Elie, Pipelin, Digital, Imaging, Computer, Graphics">
+
+  <title>Paul-Élie Pipelin - The Ultimate Chess Programming Book</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
+  <noscript>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  </noscript>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,550;1,400;1,550&family=Quicksand:wght@400;550&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" type="image/x-icon" href="/assets/Torch.png">
   <!-- Formulas -->
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  <script>
+  <script async id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script async>
     window.MathJax = {
       tex: {
         inlineMath: { '[+]': [['$', '$']] }
@@ -20,9 +37,16 @@
   <!-- Code display -->
   <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/styles/default.min.css">
   <script src="https://unpkg.com/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
-  <script>hljs.highlightAll();</script>
-  <link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/github.min.css">
-  <link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.8.0/styles/atom-one-dark.min.css">
+  <script defer>hljs.highlightAll();</script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("code.language-rs").forEach(el => {
+        hljs.highlightElement(el);
+      });
+    });
+  </script>
+  <link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/github.min.css">
+  <link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.11.1/styles/atom-one-dark.min.css">
 
   <!-- Post title automation -->
   <style>
@@ -44,7 +68,7 @@
       opacity: 1;
     }
   </style>
-  <script>
+  <script defer>
     document.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll(".post_title").forEach(h => {
         if (h.querySelector("a"))
@@ -75,25 +99,6 @@
       });
     });
   </script>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="author" content="Paul-Elie Pipelin">
-  <meta name="description" content="The Ultimate Chess Programming Book. Personal site of Paul-Elie Pipelin, engineer in digital imaging.">
-  <meta name="keywords" content="Chess, Book, Ultimate, Engineer, Paul-Elie, Pipelin, Digital, Imaging, Computer, Graphics">
-
-  <title>Paul-Élie Pipelin - The Ultimate Chess Programming Book</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" media="print" onload="this.media='all'">
-  <noscript>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-  </noscript>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,550;1,400;1,550&family=Quicksand:wght@400;550&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-  <link rel="stylesheet" href="/styles.css">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" type="image/x-icon" href="/assets/Torch.png">
 </head>
 
 <body>
@@ -123,6 +128,7 @@
       <nav class="tight ++">
         <a class="finger bae-rock hella" href="#introduction">Introduction</a>
         <a class="finger bae-rock hella" href="#board_representations">Board Representations</a>
+        <a class="finger bae-rock hella" href="#move_representations">Move Representations</a>
         <a class="finger bae-rock hella" href="#evaluating_improvements">Evaluating Improvements</a>
         <a class="finger bae-rock hella" href="#search_and_evaluation">Search and Evaluation</a>
         <a class="finger bae-rock hella" href="#move_ordering">Move Ordering</a>
@@ -148,7 +154,7 @@
       <br>
       Each player aims at taking pieces that could defend the king, negate king space on the board to <em>checkmate</em>.
 
-      <h2 class="post_title" id="board_representations"> Board Representations </h2>
+      <h2 class="post_title" id="board_representations">Board Representations</h2>
       Let's first dive into the modeling of chess in engines. The board representation can take multiple forms, each having their benefits.<!-- , it can be square-centric or piece-centric. -->
       <br>
       A common implementation is through mailbox, an array with the size of the board (or bigger) that contains pieces.
@@ -161,7 +167,7 @@ const board: [8][8]Piece = @splat(@splat(Piece.none));</code></pre>
         <li>Accession cost</li>
         <li>Operations are tile by tile</li>
       </ul>
-      Such issues can be mitigated with bitboards. A bitboard makes the corresponding between a tile on the board and a bit of an integer. For an 8 by 8 chess board, this requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise and between bitboards such as:
+      Such issues can be mitigated with bitboards. A bitboard makes the corresponding between a tile on the board and a bit of an integer. For an 8 by 8 chess board, this requires a 64 bits integer. Since only occupancy is described, a single bitboard cannot be enough for piece type nor piece color information. The board state can be described with 8 bitboards, 6 for each piece types and and 2 for each piece colors. A specific piece can be found with a bitwise <i>and</i> between bitboards such as:
       <pre><code class="language-rs">const bb_pieces: [PieceType.nb()]u64 = @splat(0);
 const bb_color: [Color.nb()]u64 = @splat(0);
 ... // Fill bitboards
@@ -180,21 +186,24 @@ pub inline fn popLsb(x: *u64) Square {
       <pre><code class="language-rs">while (white_knights != 0)
   const white_knight_position: Square = popLsb(&white_knights);</code></pre>
 
-      <h2 class="post_title" id="move_representations"> Move representations </h2>
-      A minimal definition of a move is the <i>from</i> tile of the moving piece and the <i>to</i> tile. This can be extended with flags and can improve the code readability and performances. For example, knowing a move is a capture without verifying that the <i>to</i> tile is occupied provide a speedup.
+      <h2 class="post_title" id="move_representations">Move Representations</h2>
+      A minimal definition of a move is the <i>from</i> tile of the moving piece and the <i>to</i> tile. This can be extended with flags that can improve the code readability and performances. For example, knowing that a move is a capture without verifying that the <i>to</i> tile is occupied can provide a speedup.
       <br>
-      With a maximum value of 64, <i>from</i> and <i>to</i> tiles can be stored in a 6 bits integer and the 16 types of flags can be stored with 4 bits. This is convenient as an move then requires 16 bits which can be stored into an integer, data can be access with bit shifting.
+      With a maximum value of 64, <i>from</i> and <i>to</i> tiles can be stored in a 6 bits integer and the 16 types of flags can be stored with 4 bits. This is convenient as a move then requires 16 bits which can be stored into an integer, data can be access with bit shifting.
       <br>
-      With Zig elegant packed struct no shifting mechanics are needed:
+      With Zig elegant <code class="language-rs">packed struct</code> no shifting mechanics are needed:
       <pre><code class="language-rs">pub const Move = packed struct {
   flags: u4 = MoveFlags.quiet.index(),
   from: u6,
   to: u6,
 };</code></pre>
 
-      <h2 class="post_title" id="evaluating_improvements"> Evaluating Improvements </h2>
+      <h2 class="post_title" id="evaluating_improvements">Evaluating Improvements</h2>
+      Chess programming consist in stacking features in order to get a more powerful engine. A Sequential Probability Ratio Test (SPRT) can be done to assert whether an engine gained or lost strength after a modification. This ensure a statistically significant result.
+      <br>
+      Such test can be performed by setting up a tournament in <a href="https://cutechess.com/" target="_blank">cutechess-cli</a>. To compare multiple versions simultaneously, one can analyze the games of a larger tournament with a tool called <em>bayeselo</em>, developped by Rémi Coulom. This produces a leaderboard with scores and the ranking uncertainties.
 
-      <h2 class="post_title" id="search_and_evaluation"> Search and Evaluation </h2>
+      <h2 class="post_title" id="search_and_evaluation">Search and Evaluation</h2>
       A chess game is a succession of moves up to a final position. At each turn, each player evaluate every possible moves to pick the one that has the most chances to win.
       <br>
       To pick a move, the player has to visualize the future board state after doing the move and anticipate the opponent response in the list of all possible moves. This can be done multiple time and is called the <em>depth</em> of analysis.
@@ -281,7 +290,7 @@ pub inline fn popLsb(x: *u64) Square {
         Tapered Evaluation
       </h3>
 
-      <h2 class="post_title" id="move_ordering"> Move Ordering </h2>
+      <h2 class="post_title" id="move_ordering">Move Ordering</h2>
       With pruning, move ordering is a key factor of a chess engine. It is possible to sort move types into two categories, capturing moves and quiet moves.
       <br>
       Capturing moves are often changing board state more thant quiet moves and needs to be studied carefully by chess engines. Since chess piece types have different movesets, some are more valuable than other. Ranking captures can be done in multiple ways.
@@ -366,16 +375,16 @@ pub inline fn popLsb(x: *u64) Square {
 
       SEE, transposition table
 
-      <h2 class="post_title" id="reductions"> Reductions </h2>
+      <h2 class="post_title" id="reductions">Reductions</h2>
 
-      <h2 class="post_title" id="quiescence"> Quiescence </h2>
+      <h2 class="post_title" id="quiescence">Quiescence</h2>
 
-      <h2 class="post_title" id="staged_move_generation"> Staged Move Generation </h2>
+      <h2 class="post_title" id="staged_move_generation">Staged Move Generation</h2>
       Update state pinned on move
 
-      <h3 class="post_title" id="magic_bitboard"> Magic Bitboard </h3>
+      <h3 class="post_title" id="magic_bitboard">Magic Bitboard</h3>
 
-      <h2 class="post_title" id="transposition_table"> Transposition Table </h2>
+      <h2 class="post_title" id="transposition_table">Transposition Table</h2>
     </div>
   </div>
 
